@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Reachability from 31x31 Game</title>
+<body>
+<script src="lib/d3/d3.js"></script>
+<script src="conrec.js"></script>
+<script>
+    var currTime = '1';
+    var currLevel = 0;
+    
+    //initial svg contour
+    d3.text("t1z1.csv", function(text) {
+        var data = d3.csv.parseRows(text).map(function(row) {
+            return row.map(function(value) {
+                return +value;
+            });
+        });
+        console.log(data);
+        var cliff = -1000;
+        data.push(d3.range(data[0].length).map(function() { return cliff; }));
+        data.unshift(d3.range(data[0].length).map(function() { return cliff; }));
+        data.forEach(function(d) {
+          d.push(cliff);
+          d.unshift(cliff);
+        });
+
+        var c = new Conrec,
+            xs = d3.range(0, data.length),
+            ys = d3.range(0, data[0].length),
+            zs = [currLevel],
+            width = 800,
+            height = 800,
+            x = d3.scale.linear().range([0, width]).domain([0, data.length]),
+            y = d3.scale.linear().range([height, 0]).domain([0, data[0].length]),
+            colours = d3.scale.linear().domain([-5, 3]).range(["#fff", "red"]);
+
+        c.contour(data, 0, xs.length - 1, 0, ys.length - 1, xs, ys, zs.length, zs);
+        var test = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .selectAll("path")
+            .data(c.contourList())
+            .enter().append("path")
+            .style("fill",function(d) { return colours(d.level);})
+            .style("stroke","black")
+            .attr("d", d3.svg.line()
+              .x(function(d) { return x(d.x); })
+              .y(function(d) { return y(d.y); }));
+    });
+    
+    function updateContour(i) {
+        currLevel = i;
+        var currFile = "t" + currTime + "z1.csv";
+        d3.text(currFile, function(text) {
+            var data = d3.csv.parseRows(text).map(function(row) {
+                return row.map(function(value) {
+                    return +value;
+                });
+            });
+            console.log(data);
+            var cliff = -1000;
+            data.push(d3.range(data[0].length).map(function() { return cliff; }));
+            data.unshift(d3.range(data[0].length).map(function() { return cliff; }));
+            data.forEach(function(d) {
+              d.push(cliff);
+              d.unshift(cliff);
+            });
+
+            var c = new Conrec,
+            xs = d3.range(0, data.length),
+            ys = d3.range(0, data[0].length),
+            zs = [i],
+            width = 800,
+            height = 800,
+            x = d3.scale.linear().range([0, width]).domain([0, data.length]),
+            y = d3.scale.linear().range([height, 0]).domain([0, data[0].length]);
+                //colours = d3.scale.linear().domain([-1, 1]).range(["#fff", "red"]);
+
+            c.contour(data, 0, xs.length - 1, 0, ys.length - 1, xs, ys, zs.length, zs);
+
+            var paths = d3.select("body").selectAll("path").data(c.contourList());
+
+            paths.style("fill", "blue")
+                .transition()
+                .duration(500)
+                 .attr("d", d3.svg.line()
+                    .x(function(d) { return x(d.x); })
+                    .y(function(d) { return y(d.y); }));;
+
+            paths.enter().append("path")
+                .transition()
+                .duration(500)
+                .style("fill",function(d) { return "green";})
+                .style("stroke","black")
+                .attr("d", d3.svg.line()
+                  .x(function(d) { return x(d.x); })
+                  .y(function(d) { return y(d.y); }));
+            console.log(paths.exit());
+            paths.exit().remove();
+        });
+    }
+    
+    var i = 0;
+    function updateTransition() {
+        i += 1;
+        if (i%2 == 0) {
+            d3.select("body").transition().duration(500).style("background-color", "white");
+        }
+        else {
+            d3.select("body").transition().duration(1000).style("background-color", "red");
+        }
+    
+    
+    }
+    
+    function updateTime(t) {
+        debugger;
+        currTime = t.toString();
+        updateContour(currLevel);
+    }
+// Add a "cliff edge" to force contour lines to close along the border.
+
+</script>
+    <p>hi</p>
+    <button onclick=updateContour(-0.2) id="switch">-0.2</button>
+    <button onclick=updateContour(0) id="switch">0</button>
+    <button onclick=updateContour(0.5) id="switch">0.5</button>
+    <button onclick=updateTransition() id="switch">transition test</button>
+    </br>
+    <label for=time>Time [Evader position fixed at 1]</label>
+    <input type=range min=1 max=4 value=1 id=fader step=1 list="ticks" onchange="updateTime(this.value)">
+    <datalist id="ticks">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+    </datalist>
+</body>
