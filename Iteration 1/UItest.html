@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>noUiSlider Example</title>
+	</head>
+
+	<body>
+
+		<div id="slider-link"></div>
+        <input id='#input'></input>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="js/jquery.nouislider.js"></script>
+
+		<link href="css/jquery.nouislider.css" rel="stylesheet">
+
+		<script>
+
+			 // On document ready, initialize noUiSlider.
+			$("#slider-link").noUiSlider({
+                start: [ 20 ],
+                step: 10,
+                range: {
+                    'min': [ 20 ],
+                    'max': [ 80 ]
+                }
+            });
+            $("#slider-link").val($('#slider-link').val);
+
+		</script>
+
+	</body>
+</html>

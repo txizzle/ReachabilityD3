@@ -2,14 +2,16 @@
 <meta charset="utf-8">
 <title>Reachability from 31x31 Game</title>
 <body>
-<script src="lib/d3/d3.js"></script>
-<script src="conrec.js"></script>
+<script src="js/d3.js"></script>
+<script src="js/conrec.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 <script>
     var currTime = '1';
     var currLevel = 0;
     
     //initial svg contour
-    d3.text("t1z1.csv", function(text) {
+    d3.text("t31z1.csv", function(text) {
         var data = d3.csv.parseRows(text).map(function(row) {
             return row.map(function(value) {
                 return +value;
@@ -110,9 +112,10 @@
     function updateTime(t) {
         debugger;
         currTime = t.toString();
+        $('#timeLabel').val(t); 
+        document.getElementById('timeSlider').value = t;
         updateContour(currLevel);
     }
-// Add a "cliff edge" to force contour lines to close along the border.
 
 </script>
     <p>Contour Level</p>
@@ -122,11 +125,7 @@
     <button onclick=updateTransition() id="switch">transition test</button>
     </br>
     <label for=time>Time [Evader position fixed at 1]</label>
-    <input type=range min=1 max=4 value=1 id=fader step=1 list="ticks" onchange="updateTime(this.value)">
-    <datalist id="ticks">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-    </datalist>
+    <input type=range min=1 max=40 value=1 id=timeSlider step=1 list="ticks" onchange="updateTime(this.value)">
+    <input type="text" id="timeLabel" value="" onchange="updateTime(this.value)">
+
 </body>
