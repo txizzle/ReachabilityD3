@@ -81,15 +81,11 @@
             var paths = d3.select("body").selectAll("path").data(c.contourList());
 
             paths.style("fill", "blue")
-                .transition()
-                .duration(500)
                  .attr("d", d3.svg.line()
                     .x(function(d) { return x(d.x); })
                     .y(function(d) { return y(d.y); }));;
 
             paths.enter().append("path")
-                .transition()
-                .duration(500)
                 .style("fill",function(d) { return "green";})
                 .style("stroke","black")
                 .attr("d", d3.svg.line()
