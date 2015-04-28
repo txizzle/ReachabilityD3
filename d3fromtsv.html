@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+      <style>
+        h2 {
+          color: black;
+          text-align: center;
+        }
+
+        .axis {
+          font-family: arial;
+          font-size: 0.6em;
+        }
+
+        path {
+          fill: none;
+          stroke: black;
+          stroke-width: 2px;
+        }
+
+        .tick {
+          fill: none;
+          stroke: black;
+        }
+
+        circle {
+          opacity: 0.4;
+          stroke: none;
+        }
+
+        .line_plot {
+          fill: none;
+          stroke: #4eb0bb;
+          stroke-width: 1px;
+        }
+      </style>
+
+    <script type="text/javascript">
+        function draw(data) {
+            "use strict";
+            debugger;
+            var margin = 75,
+                width = 1400 - margin,
+                height = 1400 - margin;
+
+            var radius = 3,
+                multiplier = 2;
+            
+            d3.select("body")
+              .append("h2")
+              .text("Locations of Pictures");
+
+            var lat_extent = d3.extent(data, function(d) {
+                return d['lat'];
+            });
+
+            var lat_scale = d3.scale.linear()
+                .range([width, margin])
+                .domain(lat_extent);
+          
+            var long_extent = d3.extent(data, function(d) {
+                return d['long'];
+            });
+
+            var long_scale = d3.scale.linear()
+                .range([height, margin])
+                .domain(long_extent);
+          
+          
+            var lat_axis = d3.svg.axis()
+                .scale(lat_scale)
+                .orient("bottom");
+          
+            var svg = d3.select("body")
+                .append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+                .append('g')
+                .attr('class', 'chart');
+            var svg = d3.select('svg');
+
+            svg.append('g')
+                .attr('class', 'x axis')
+                .attr('transform', "translate(0," + height + ")")
+                .call(lat_axis);
+
+            var long_axis = d3.svg.axis()
+                .scale(long_scale)
+                .orient("left");
+
+            svg.append('g')
+                .attr('class', 'y axis')
+                .attr('transform', "translate(" + margin + ",0)")
+                .call(long_axis);
+          
+            
+            debugger;
+              //Select circle elements (which don't exist yet)
+        
+            var circles = svg.selectAll('circle') 
+                //Bind the elements to our data
+				.data(data)
+                //Get the "rows" where the DOM 
+                //  element doesn't yet exist
+				.enter()
+                //Add circle elements
+				.append('circle')
+					//set the cx and cy to our
+					//data point (30,50,100)
+					.attr('cx', function(d) { return lat_scale(d['lat']);} )
+					.attr('cy', function(d) { return long_scale(d['long']);} )
+					//fixed attribute value for all new circles
+					.attr('r', 10)
+					.style('fill', function(d) { return d['color'];})
+                    .on("click", function(){
+                        console.log(d3.select(this).datum()['c']);
+                        d3.select(this).style("fill", "black");});
+      };
+    </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the TSV file
+    and pass the contents of it to the draw function
+    */
+      debugger;
+      /*
+      MATLAB:
+save('test.txt', 'x','-ASCII');
+to save x to TSV test.txt
+
+d3.text not working for tsv? INVESTIGATE
+d3.tsv.parseRows?
+
+when d3 loads test.txt with d3.tsv: loads as data: 31 x object.
+Object.keys(data[0]).length = 31
+*/
+      d3.text("test.tsv", function(text) {
+          debugger;
+        var temp = d3.tsv.parseRows(text);
+      });
+  d3.tsv("test.txt", function(d) {
+        return d;
+    }, draw);
+  </script>
+</body>
+</html>
