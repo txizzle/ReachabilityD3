@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<title>Plotly postMessage API</title>
+<head>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/home.css" rel="stylesheet">
+    <meta name="description" content="Interactively view x, y slices through my_graphs and contour plots online with Plotly.">
+</head>
+
+<body style="font-family: 'Open Sans', serif; background: #edf1f8">
+    <div class="row">
+        <div style="margin: 0 2em 0; text-align: left; margin-top: 50px;">
+            <h1 style="text-align: center; text-transform: uppercase; color: #447bdc;">
+                Change reachable set with fixed evader
+            </h1>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <button onclick="newgraph()">click me to change the graph</button>
+                    <button onclick="colortrace()">click me to make trace different color</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <label style="text-align: center" for=time>Time [Evader position fixed at 1]</label>
+                    <input type=range min=1 max=127 value=1 id=timeSlider step=1 list="ticks" oninput="updateTime(this.value)">
+                    <input type="text" id="timeLabel" value="" oninput="updateTime(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <iframe id="my_graph"
+                    src="https://plot.ly/~txizzle/119.embed"
+                    style="width:100%; height:600px; border:none"
+                    seamless>
+            </iframe>
+        </div>
+    </div>
+
+<script type="text/javascript" charset="utf-8">
+/*
+Boiler-Plate Plotly Embed Code
+Create a `graphs` object that adds listeners to every embedded iFrame
+and provides graphContentWindow for posting messages to, e.g.
+
+*/
+function init_graph_obj(id){
+    var obj = {
+        graphContentWindow: $('#'+id)[0].contentWindow,
+        id: id
+    };
+    obj.pinger = setInterval(function(){
+        obj.graphContentWindow.postMessage({task: 'ping'}, 'https://plot.ly');
+    }, 500);
+    return obj;
+}
+var graphs = {};
+var curr = 0;
+var previous;
+$('iframe').each(function(i, obj){
+    graphs[obj.id] = init_graph_obj(obj.id);
+});
+    
+function newgraph() {
+    graphs.my_graph.graphContentWindow.postMessage({
+        'task': 'newPlot',
+        'data': [
+            {
+                'x': [1,2,3],
+                'y': [10,20,30],
+                'type': 'scatter'
+            }],
+        'layout': {'title': 'new title'}
+    }, 'https://plot.ly');
+}
+    
+function colortrace() {
+    graphs.my_graph.graphContentWindow.postMessage({
+        'task': 'restyle',
+        //'update': {'line': {'color': 'rgb(74,102,160)'}},
+        'update': {'visible': true},
+        'indices': [0]
+    }, 'https://plot.ly');
+}
+    
+function updateTime(newTime) {
+    $("#timelabel").value=newTime;
+    previous = curr;
+    curr = newTime;
+    graphs.my_graph.graphContentWindow.postMessage({
+        'task': 'restyle',
+        'update': {'line': {'color': 'rgb(74,102,160)'}},
+        'indices': [curr]
+    }, 'https://plot.ly');
+    graphs.my_graph.graphContentWindow.postMessage({
+        'task': 'restyle',
+        'update': {'line': {'color': 'rgb(45.934,183.0026,163.8205)'}},
+        'indices': [previous]
+    }, 'https://plot.ly');
+}
+    
+// Window "message"s are messages that originate from the embedded iFrames,
+// like "pong", zoom, click, and hover.
+window.addEventListener('message', function(e){
+    var message = e.data;
+    var graph;
+    for(var i in graphs) {
+        if(graphs[i].graphContentWindow === e.source) {
+            graph = graphs[i];
+        }
+    }
+    if(typeof graph === "undefined") {
+        return;
+    }
+    var pinger = graph.pinger;
+    var graphContentWindow = graph.graphContentWindow;
+    var id = graph.id;
+    if('pong' in message && message.pong) {
+        clearInterval(pinger);
+        graphContentWindow.postMessage({
+            'task': 'listen',
+            'events': ['click', 'hover', 'zoom'] // Customize events here
+        }, 'https://plot.ly');
+    } else if (message.type==='hover' ||
+                message.type==='zoom'  ||
+                message.type==='click') {
+        console.log(id, '-->', message);
+    }
+});
+</script>
+
+</body>
+
+</html>
