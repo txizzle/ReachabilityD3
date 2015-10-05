@@ -1,6 +1,5 @@
 var currTime = '2';
 var currEvader = '1';
-var currLevel = 0;
 var contourDict = {};
 
 //initial svg contour
@@ -26,7 +25,7 @@ d3.text("csv/t2z1.csv", function(text) {
     var c = new Conrec,
         xs = d3.range(0, data.length),
         ys = d3.range(0, data[0].length),
-        zs = [currLevel],
+        zs = [0],
         width = 300,
         height = 300,
         x = d3.scale.linear().range([0, width]).domain([0, data.length]),
@@ -56,8 +55,8 @@ d3.text("csv/t2z1.csv", function(text) {
             }));
 });
 
-function updateContour(i) {
-    var key = currTime.toString() + "," + currEvader.toString();
+function updateContour(t,v) {
+    var key = t.toString() + "," + v.toString();
     //if (key in contourDict) {
     if (1 == 2) { //temporariliy disable memoization
         var c = contourDict[key];
@@ -79,7 +78,6 @@ function updateContour(i) {
                     return y(d.y);
                 }));
     } else {
-        currLevel = i;
         var currFile = "csv/t" + currTime + "z" + currEvader + ".csv";
         d3.text(currFile, function(text) {
             var data = d3.csv.parseRows(text).map(function(row) {
@@ -103,7 +101,7 @@ function updateContour(i) {
             var c = new Conrec,
                 xs = d3.range(0, data.length),
                 ys = d3.range(0, data[0].length),
-                zs = [i],
+                zs = [0],
                 width = 300,
                 height = 300,
                 x = d3.scale.linear().range([0, width]).domain([0,
@@ -136,20 +134,18 @@ function updateContour(i) {
     };
 }
 
-var i = 0;
-
 function updateTime(t) {
     currTime = t.toString();
     $('#timeLabel').val(t);
     document.getElementById('timeSlider').value = t;
-    updateContour(currLevel);
+    updateContour(currTime, currEvader);
 }
 
 function updateEvader(v) {
     currEvader = v.toString();
     $('#evaderLabel').val(v);
     document.getElementById('evaderSlider').value = v;
-    updateContour(currLevel);
+    updateContour(currTime, currEvader);
 }
 
 function loadJSON() {
