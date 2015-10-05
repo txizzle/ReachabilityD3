@@ -53,3 +53,9 @@ body {
 .row {
     text-align: center;
 }
+
+#roundslider {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

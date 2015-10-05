@@ -14,6 +14,9 @@
 
         <!-- Custom CSS -->
         <link href="css/contours.css" rel="stylesheet">
+        
+        <!-- Roundslider -->
+        <link href="css/roundslider.css" rel="stylesheet">
 
         <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
     </head>
@@ -21,16 +24,30 @@
     <body>
         <div class="row">
             <h1>Reachability for 31x31 Pursuit-Evader</h1>
-            <h2>Iteration 4</h2>
+            <h2>Iteration 5</h2>
         </div>
         <div class="row">
-            <label for=time>Time</label>
-            <input type=range min=1 max=127 value=2 id=timeSlider step=1 list="ticks" oninput="updateTime(this.value)">
-            <input type="text" id="timeLabel" value="2" oninput="updateTime(this.value)">
-            <label for=time>Evader</label>
-            <input type=range min=1 max=86 value=1 id=evaderSlider step=1 list="ticks" oninput="updateEvader(this.value)">
-            <input type="text" id="evaderLabel" value="1" oninput="updateEvader(this.value)">
-            <div id="contour"></div>
+            
+            <div class="col-md-4">
+                <label for=time>Time</label>
+                <input type=range min=1 max=127 value=2 id=timeSlider step=1 list="ticks" oninput="updateTime(this.value)">
+                <input type="text" id="timeLabel" value="2" oninput="updateTime(this.value)">
+            </div>
+            <div class="col-md-4">
+                <label for=time>Evader</label>
+                <input type=range min=1 max=86 value=1 id=evaderSlider step=1 list="ticks" oninput="updateEvader(this.value)">
+                <input type="text" id="evaderLabel" value="1" oninput="updateEvader(this.value)">
+            </div>
+            <div class="col-md-4">
+                <div id="roundslider"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div id="contour"></div>
+            </div>
+            
         </div>
     </body>
     <footer>
@@ -42,11 +59,17 @@
 
         <!-- D3.js -->
         <script src="js/jquery.js"></script>
+        
+        <!-- Round slider -->
+        <script src="js/roundslider.js"></script>
 
         <!-- JSON parsing (deprecated) -->
         <script src="js/parseJSON.js"></script>
 
         <!-- Custom contour updates-->
         <script src="js/contours.js"></script>
+        
+        <!-- Custom round slider -->
+        <script src="js/slider.js"></script>
     </footer>
 </html>
