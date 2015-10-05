@@ -1,48 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+	<head>
+		<title> mat2d3Test </title>
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<style type="text/css">
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: black;
+			shape-rendering: crispEdges;
+		}
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+		.axis text {
+			font-family: Helvetica, Arial, sans-serif;
+			font-size: 16px;
+		}
 
-    <title>Reachability Visualization</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="css/home.css" rel="stylesheet">
-
-    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-</head>
-
-<body>
-    <div class="row">
-        <div class="text-center text-vertical-center col-lg-12">
-            <h1>Reachability Visualization: 31x31 Pursuit Evasion</h1>
-        </div>
-    </div>
-    <br>
-    <br>
-    <div class="row text-center">
-        <a class="btn" href="Iteration1/reachability_no_enter.html">Iteration 1: No enter</a>
-    <a class="btn" href="Iteration2/index.html">Iteration 2</a>
-    <a class="btn" href="Iteration3/index.html">Iteration 3</a>
-    <a class="btn" href="Iteration4/reachability_no_enter.html">Iteration 4</a>
-    </div>
-    <div class="row text-center">
-        <ul class="text-center">
-            <li>Iteration 1: D3.js using .csv imported from MATLAB contour(). Demo of 1x40 contours. 5/28/2015</li>
-            <li>Iteration 2: Plot.ly using Plot.ly MATLAB API. 9/21/2015</li>
-            <li>Iteration 3: Plot.ly using Plot.ly MATLAB API with contourslice(). 9/23/2015</li>
-            <li>Iteration 4: D3.js using .csv imported from MATLAB. All 86x127 contours. 10/1/2015</li>
-        </ul>
-    </div>
-    
-    
-</body>
-
+		</style>
+	</head>
+	<body>
+		<div class="content">
+		<script type="text/javascript" src="mat2d3Test.js"></script>
+		</div>
+	</body>
 </html>
