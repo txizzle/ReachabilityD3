@@ -57,14 +57,15 @@ d3.text("csv/t2z1.csv", function(text) {
 });
 
 function updateContour(i) {
-    console.log(i);
-    if (i.toString() in contourDict) {
-        var c = contourDict[currTime];
+    var key = currTime.toString() + "," + currEvader.toString();
+    //if (key in contourDict) {
+    if (1 == 2) { //temporariliy disable memoization
+        var c = contourDict[key];
         //console.log(c);
         d3.select("svg").remove();
         var test = d3.select("#contour").append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", 300)
+            .attr("height", 300)
             .selectAll("path")
             .data(c.contourList())
             .enter().append("path")
@@ -114,7 +115,8 @@ function updateContour(i) {
             
             c.contour(data, 0, xs.length - 1, 0, ys.length - 1, xs,
                 ys, zs.length, zs);
-            contourDict[currTime] = c;
+            
+            contourDict[key] = c;
             d3.select("svg").remove();
             var test = d3.select("#contour").append("svg")
                 .attr("width", width)
