@@ -2,6 +2,13 @@ var currTime = '2';
 var currEvader = '1';
 var currLevel = 0;
 var contourDict = {};
+var islands;
+$.get("twoislands.txt", 
+    function(data) {
+        islands = data.split("\n");
+        debugger;
+    }
+);
 
 //initial svg contour
 var margin = {top: 20, right: 80, bottom: 80, left: 80},
@@ -130,9 +137,7 @@ function updateContour(i) {
         .attr("class", "axis")
         .call(yAxis);
         
-        $.ajax({
-          url: currFile+"1.csv", //or your url
-          success: function(data){
+        if (islands.indexOf(key) > -1) {
             console.log(">1 islands");
             d3.csv(currFile+"1.csv", function(mydata)
                 {
@@ -151,9 +156,8 @@ function updateContour(i) {
                 .attr("d", line);
 
             });
-          },
-          error: function(data){
-            debugger;
+          }
+          else{
             console.log("only one island");
             d3.csv(currFile+".csv", function(mydata)
             {
@@ -164,9 +168,8 @@ function updateContour(i) {
 
             });
             
-          },
-        });
-    };
+          }
+        };
 };
 
 var i = 0;
