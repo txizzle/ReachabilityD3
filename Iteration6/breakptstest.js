@@ -38,7 +38,7 @@ svg.append("g")
 .attr("class", "axis")
 .call(yAxis);
 
-d3.csv("mat2d3testData1.csv", function(mydata)
+d3.csv("breakptstestData1.csv", function(mydata)
 {
 	svg.append("path")
 	.datum(mydata)
@@ -47,7 +47,7 @@ d3.csv("mat2d3testData1.csv", function(mydata)
 
 });
 
-d3.csv("mat2d3testData2.csv", function(mydata)
+d3.csv("breakptstestData2.csv", function(mydata)
 {
 	svg.append("path")
 	.datum(mydata)
