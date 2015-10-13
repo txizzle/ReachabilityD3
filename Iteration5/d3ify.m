@@ -70,35 +70,35 @@ end;
 
 
 % create a javascript file containing the d3 code
-fid = fopen([saveFileName, '.js'], 'w');
-
-
-createMargins(fid, d3Params);
-createAxes(fid, axisHandle, d3Params);
-createLine(fid, d3Params);
-createSVG(fid, d3Params);
-
-% draw axis and axis labels
-drawAxes(fid, axisHandle, d3Params);
-
-
-if numel(lineSeriesHandles) == 0
-    disp('no children on this set of axes');
-elseif numel(lineSeriesHandles) == 1
-    drawLineSeriesObject(...
-        fid, lineSeriesHandles, saveFileName, [], d3Params);
-else
-    for i = 1:numel(lineSeriesHandles)
-        drawLineSeriesObject(...
-            fid, lineSeriesHandles(i), saveFileName, i, d3Params);
-    end;
-end;
-
-
-% close the javascript file
-fclose(fid);
-writeHTML(saveFileName, lineSeriesHandles, d3Params);
-% end of main
+% % fid = fopen([saveFileName, '.js'], 'w');
+% 
+% 
+% createMargins(fid, d3Params);
+% createAxes(fid, axisHandle, d3Params);
+% createLine(fid, d3Params);
+% createSVG(fid, d3Params);
+% 
+% % draw axis and axis labels
+% drawAxes(fid, axisHandle, d3Params);
+% 
+% 
+% if numel(lineSeriesHandles) == 0
+%     disp('no children on this set of axes');
+% elseif numel(lineSeriesHandles) == 1
+%     drawLineSeriesObject(...
+%         fid, lineSeriesHandles, saveFileName, [], d3Params);
+% else
+%     for i = 1:numel(lineSeriesHandles)
+%         drawLineSeriesObject(...
+%             fid, lineSeriesHandles(i), saveFileName, i, d3Params);
+%     end;
+% end;
+% 
+% 
+% % close the javascript file
+% fclose(fid);
+% writeHTML(saveFileName, lineSeriesHandles, d3Params);
+% % end of main
 
 
 
