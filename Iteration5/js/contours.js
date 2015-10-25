@@ -4,7 +4,7 @@ var currLevel = 0;
 var contourDict = {};
 
 //initial svg contour
-d3.text("../csv/t2z1.csv", function(text) {
+d3.text("../Iteration6/csv/t2z1.csv", function(text) {
     var data = d3.csv.parseRows(text).map(function(row) {
         return row.map(function(value) {
             return -value;
@@ -81,7 +81,7 @@ function updateContour(i) {
                 }));
     } else {
         currLevel = i;
-        var currFile = "../csv/t" + currTime + "z" + currEvader + ".csv";
+        var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader + ".csv";
         d3.text(currFile, function(text) {
             var data = d3.csv.parseRows(text).map(function(row) {
                 return row.map(function(value) {

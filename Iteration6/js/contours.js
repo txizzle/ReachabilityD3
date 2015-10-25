@@ -51,7 +51,7 @@ svg.append("g")
 .attr("class", "axis")
 .call(yAxis);
 
-d3.csv("../csv/t1z1Data1.csv", function(mydata)
+d3.csv("csv/t1z1Data1.csv", function(mydata)
 {
     svg.append("path")
     .datum(mydata)
@@ -60,7 +60,7 @@ d3.csv("../csv/t1z1Data1.csv", function(mydata)
 
 });
 
-d3.csv("../csv/t1z1Data2.csv", function(mydata)
+d3.csv("csv/t1z1Data2.csv", function(mydata)
 {
     svg.append("path")
     .datum(mydata)
@@ -72,7 +72,7 @@ d3.csv("../csv/t1z1Data2.csv", function(mydata)
 function updateContour(i) {
     var key = currTime.toString() + "," + currEvader.toString() + "Data";
     currLevel = i;
-    var currFile = "../csv/t" + currTime + "z" + currEvader +"Data";
+    var currFile = "csv/t" + currTime + "z" + currEvader +"Data";
     key = "t" + currTime + "z" + currEvader;
     console.log(d3.selectAll("path"));
     d3.selectAll("path").remove();
