@@ -75,7 +75,7 @@ function updateContour(i) {
     var currFile = "../csv/t" + currTime + "z" + currEvader +"Data";
     key = "t" + currTime + "z" + currEvader;
     console.log(d3.selectAll("path"));
-    d3.selectAll("path").remove();
+    d3.select("path").remove();
     if (islands.indexOf(key) > -1) {
         console.log(">1 islands");
         d3.csv(currFile+"1.csv", function(mydata) {
