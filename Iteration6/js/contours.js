@@ -74,21 +74,9 @@ function updateContour(i) {
     currLevel = i;
     var currFile = "csv/t" + currTime + "z" + currEvader +"Data";
     key = "t" + currTime + "z" + currEvader;
-    d3.select("svg").remove();
+    d3.select("path").remove();
 
-    var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(0, " + height + ")")
-    .call(xAxis);
-
-    svg.append("g")
-    .attr("class", "axis")
-    .call(yAxis);
+    var svg = d3.select("svg");
 
     if (islands.indexOf(key) > -1) {
         console.log(">1 islands");
