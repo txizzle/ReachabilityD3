@@ -60,7 +60,7 @@ d3.csv("../Iteration6/csv/t1z1Data1.csv", function(mydata)
 
 });
 
-d3.csv("../Iteration6/csv/t1z1Data2.csv", function(mydata)
+d3.csv("../csv/t1z1Data2.csv", function(mydata)
 {
     svg.append("path")
     .datum(mydata)
@@ -76,18 +76,19 @@ function updateContour(i) {
     key = "t" + currTime + "z" + currEvader;
     console.log(d3.selectAll("path"));
     d3.select("path").remove();
+    d3.selectAll("path").attr("class", "line")
     if (islands.indexOf(key) > -1) {
         console.log(">1 islands");
         d3.csv(currFile+"1.csv", function(mydata) {
                 svg.append("path")
                 .datum(mydata)
-                .attr("class", "line")
+                .attr("class", "mainline")
                 .attr("d", line);
             });
         d3.csv(currFile+"2.csv", function(mydata) {
             svg.append("path")
             .datum(mydata)
-            .attr("class", "line")
+            .attr("class", "mainline")
             .attr("d", line);
         });
     } else {
@@ -95,7 +96,7 @@ function updateContour(i) {
         d3.csv(currFile+".csv", function(mydata){
             svg.append("path")
             .datum(mydata)
-            .attr("class", "line")
+            .attr("class", "mainline")
             .attr("d", line);
         });
     }

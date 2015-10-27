@@ -77,3 +77,9 @@ body {
     stroke: #0072BD;
     stroke-width: 0.5 px;
 }
+
+.mainline {
+    fill: none;
+    stroke: #25e68d;
+    stroke-width: 0.5 px;
+}
