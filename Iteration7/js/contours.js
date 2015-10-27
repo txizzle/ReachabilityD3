@@ -3,6 +3,7 @@ var currEvader = '1';
 var currLevel = 0;
 var contourDict = {};
 var islands;
+var leaveTrails = 0;
 $.get("twoislands.txt", 
     function(data) {
         islands = data.split("\n");
@@ -60,7 +61,7 @@ d3.csv("../Iteration6/csv/t1z1Data1.csv", function(mydata)
 
 });
 
-d3.csv("../csv/t1z1Data2.csv", function(mydata)
+d3.csv("../Iteration6/csv/t1z1Data2.csv", function(mydata)
 {
     svg.append("path")
     .datum(mydata)
@@ -75,7 +76,6 @@ function updateContour(i) {
     var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader +"Data";
     key = "t" + currTime + "z" + currEvader;
     console.log(d3.selectAll("path"));
-    d3.select("path").remove();
     d3.selectAll("path").attr("class", "line");
     if (islands.indexOf(key) > -1) {
         console.log(">1 islands");
@@ -100,6 +100,12 @@ function updateContour(i) {
             .attr("d", line);
         });
     }
+    if (leaveTrails == 0) {
+        d3.selectAll(".line").remove();
+    }
+    else if (leaveTrails == 1) {
+        d3.select(".line").remove();
+    }
 };
 
 var i = 0;
@@ -117,3 +123,7 @@ function updateEvader(v) {
     document.getElementById('evaderSlider').value = v;
     updateContour(currLevel);
 }
+
+$("input[name=optradio]:radio").change(function () {
+    leaveTrails = $(this).val();
+});
