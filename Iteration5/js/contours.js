@@ -126,6 +126,7 @@ function updateContour(i) {
                 .data(c.contourList())
                 .enter().append("path")
                 .style("stroke", "black")
+                .style("fill", "none")
                 .attr("d", d3.svg.line()
                     .x(function(d) {
                         return x(d.x);
