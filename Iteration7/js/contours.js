@@ -77,6 +77,9 @@ function updateContour(i) {
     key = "t" + currTime + "z" + currEvader;
     console.log(d3.selectAll("path"));
     d3.selectAll("path").attr("class", "line");
+    if (leaveTrails == 0) {
+        d3.selectAll("path").remove();
+    }
     if (islands.indexOf(key) > -1) {
         console.log(">1 islands");
         d3.csv(currFile+"1.csv", function(mydata) {
@@ -100,10 +103,7 @@ function updateContour(i) {
             .attr("d", line);
         });
     }
-    if (leaveTrails == 0) {
-        d3.selectAll(".line").remove();
-    }
-    else if (leaveTrails == 1) {
+    if (leaveTrails == 1) {
         d3.select(".line").remove();
     }
 };
