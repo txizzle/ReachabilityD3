@@ -21,11 +21,11 @@ width = 500 - margin.left - margin.right,
 height = 500 - margin.top - margin.bottom;
 
 var xScale = d3.scale.linear()
-    .domain([0, 30])
+    .domain([1, 31])
     .range([0, width]);
 
 var yScale = d3.scale.linear()
-    .domain([0, 30])
+    .domain([1, 31])
     .range([height, 0]);
 
 var exScale = d3.scale.linear()
