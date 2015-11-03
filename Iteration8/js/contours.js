@@ -1,9 +1,13 @@
 var currTime = '2';
 var currEvader = '1';
-var currLevel = 0;
 var contourDict = {};
 var islands;
 var leaveTrails = 0;
+var showEvader = 1;
+
+var evaderX;
+var evaderY;
+
 $.get("twoislands.txt", 
     function(data) {
         islands = data.split("\n");
@@ -22,6 +26,14 @@ var xScale = d3.scale.linear()
 
 var yScale = d3.scale.linear()
     .domain([0, 30])
+    .range([height, 0]);
+
+var exScale = d3.scale.linear()
+    .domain([-1, 1])
+    .range([0, width]);
+
+var eyScale = d3.scale.linear()
+    .domain([-1, 1])
     .range([height, 0]);
 
 var xAxis = d3.svg.axis()
@@ -70,13 +82,19 @@ d3.csv("../Iteration6/csv/t1z1Data2.csv", function(mydata)
 
 });
 
-function updateContour(i) {
-    currLevel = i;
+evaderX = getEvaderX(1);
+evaderY = getEvaderY(1);
+
+function updateContour() {
     var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader +"Data";
     var key = "t" + currTime + "z" + currEvader;
+    console.log(d3.selectAll("path"));
     d3.selectAll("path").attr("class", "line");
     if (leaveTrails == 0) {
         d3.selectAll("path").remove();
+    }
+    if (showEvader == 1) {
+        d3.selectAll("circle").remove();
     }
     if (islands.indexOf(key) > -1) {
         console.log(">1 islands");
@@ -101,6 +119,33 @@ function updateContour(i) {
             .attr("d", line);
         });
     }
+    
+    //evader
+    svg.append("circle")
+    .datum([evaderX, evaderY])
+    .attr("cx", function(d) { 
+        return exScale(d[0]);
+    })
+    .attr("cy", function(d) {
+        return eyScale(d[1]);
+    })
+    .attr("r", 3)
+    .attr("fill", "blue");
+    
+    //catch radius
+    svg.append("circle")
+    .datum([evaderX, evaderY])
+    .attr("cx", function(d) { 
+        return exScale(d[0]);
+    })
+    .attr("cy", function(d) {
+        return eyScale(d[1]);
+    })
+    .attr("r", height/20)
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-dasharray", "10 5");
+    
     if (leaveTrails == 1) {
         d3.select(".line").remove();
     }
@@ -112,14 +157,42 @@ function updateTime(t) {
     currTime = t.toString();
     $('#timeLabel').val(t);
     document.getElementById('timeSlider').value = t;
-    updateContour(currLevel);
+    updateContour();
 }
+
+function getEvaderX(val) {
+    var s = val/86*5.6;
+    if (s < 1.2)
+        return -0.8;
+    else if (s<2.8)
+        return -0.8 + (s-1.2);
+    else if (s<4.0)
+        return 0.8;
+    else
+        return 0.8 - (s-4.0);
+}
+
+function getEvaderY(val) {
+    var s = val/86*5.6;
+    if (s < 1.2)
+        return s-0.6;
+    else if (s<2.8)
+        return 0.6;
+    else if (s<4.0)
+        return 0.6 - (s-2.8);
+    else
+        return -0.6;
+}
+
+
 
 function updateEvader(v) {
     currEvader = v.toString();
     $('#evaderLabel').val(v);
+    evaderX = getEvaderX(v);
+    evaderY = getEvaderY(v);
     document.getElementById('evaderSlider').value = v;
-    updateContour(currLevel);
+    updateContour();
 }
 
 $("input[name=optradio]:radio").change(function () {
