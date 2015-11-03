@@ -85,6 +85,32 @@ d3.csv("../Iteration6/csv/t1z1Data2.csv", function(mydata)
 evaderX = getEvaderX(1);
 evaderY = getEvaderY(1);
 
+//evader
+svg.append("circle")
+.datum([evaderX, evaderY])
+.attr("cx", function(d) { 
+    return exScale(d[0]);
+})
+.attr("cy", function(d) {
+    return eyScale(d[1]);
+})
+.attr("r", 3)
+.attr("fill", "blue");
+
+//catch radius
+svg.append("circle")
+.datum([evaderX, evaderY])
+.attr("cx", function(d) { 
+    return exScale(d[0]);
+})
+.attr("cy", function(d) {
+    return eyScale(d[1]);
+})
+.attr("r", height/20)
+.attr("fill", "none")
+.attr("stroke", "black")
+.attr("stroke-dasharray", "10 5");
+
 function updateContour() {
     var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader +"Data";
     var key = "t" + currTime + "z" + currEvader;
@@ -151,8 +177,6 @@ function updateContour() {
     }
 };
 
-var i = 0;
-
 function updateTime(t) {
     currTime = t.toString();
     $('#timeLabel').val(t);
@@ -183,8 +207,6 @@ function getEvaderY(val) {
     else
         return -0.6;
 }
-
-
 
 function updateEvader(v) {
     currEvader = v.toString();
