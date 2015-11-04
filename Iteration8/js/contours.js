@@ -49,6 +49,11 @@ var line = d3.svg.line()
     .x(function(d) { return xScale(d.x1); })
     .y(function(d) { return yScale(d.y1); });
 
+var obstacleLine = d3.svg.line()
+    .interpolate("linear")
+    .x(function(d) { return exScale(d[1]); })
+    .y(function(d) { return eyScale(d[0]); });
+
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -139,6 +144,7 @@ function updateContour() {
     } else {
         console.log("only one island");
         d3.csv(currFile+".csv", function(mydata){
+            debugger;
             svg.append("path")
             .datum(mydata)
             .attr("class", "mainline")
@@ -172,6 +178,13 @@ function updateContour() {
     .attr("stroke", "black")
     .attr("stroke-dasharray", "10 5");
     
+    //obstacle
+    svg.append("path")
+    .datum(getObstacle(parseInt(currTime)))
+    .attr("class", "obstacle")
+    .attr("d", obstacleLine);
+    debugger;
+
     if (leaveTrails == 1) {
         d3.select(".line").remove();
     }
@@ -206,6 +219,24 @@ function getEvaderY(val) {
         return 0.6 - (s-2.8);
     else
         return -0.6;
+}
+
+function getObstacle(time) {
+    var t = time/127.0;
+    if (t >= 0 && t < 0.2) {
+        var bt = -2*t;
+    }
+    else if (t < 0.6) {
+        var bt = -0.4;
+    }
+    else if (t < 0.8) {
+        var bt = -2.8 + 4*t;
+    }
+    else {
+        var bt = 0.4;
+    }
+    return([[-0.2,-0.6+bt],[-0.2,0.6+bt],[0.2,0.6+bt],[0.2,-0.6+bt]]);
+    
 }
 
 function updateEvader(v) {

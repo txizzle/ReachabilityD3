@@ -74,12 +74,17 @@ body {
 
 .line {
     fill: none;
-    stroke: #0072BD;
+    stroke: #009aff;
     stroke-width: 0.5 px;
 }
 
 .mainline {
     fill: none;
-    stroke: #f03d3d;
+    stroke: #ff496c;
     stroke-width: 0.5 px;
+}
+
+.obstacle {
+    fill: #de88a3;
+    stroke: #f84949;
 }
