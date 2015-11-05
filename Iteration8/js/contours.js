@@ -222,7 +222,7 @@ function getEvaderX(val) {
 }
 
 function getObstacle(time) {
-    var t = time/127.0;
+    var t = (time-1)/126.0;
     if (t >= 0 && t < 0.2) {
         var bt = -2*t;
     }
