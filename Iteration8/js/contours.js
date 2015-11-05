@@ -46,13 +46,13 @@ var yAxis = d3.svg.axis()
 
 var line = d3.svg.line()
     .interpolate("linear")
-    .x(function(d) { return xScale(d.x1); })
-    .y(function(d) { return yScale(d.y1); });
+    .x(function(d) { return xScale(d.y1); })
+    .y(function(d) { return yScale(d.x1); });
 
 var obstacleLine = d3.svg.line()
     .interpolate("linear")
-    .x(function(d) { return exScale(d[1]); })
-    .y(function(d) { return eyScale(d[0]); });
+    .x(function(d) { return exScale(d[0]); })
+    .y(function(d) { return eyScale(d[1]); });
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -197,8 +197,8 @@ function updateTime(t) {
     updateContour();
 }
 
-function getEvaderX(val) {
-    var s = val/86*5.6;
+function getEvaderY(val) {
+    var s = (val-1)/85*5.6;
     if (s < 1.2)
         return -0.8;
     else if (s<2.8)
@@ -209,8 +209,8 @@ function getEvaderX(val) {
         return 0.8 - (s-4.0);
 }
 
-function getEvaderY(val) {
-    var s = val/86*5.6;
+function getEvaderX(val) {
+    var s = (val-1)/85*5.6;
     if (s < 1.2)
         return s-0.6;
     else if (s<2.8)
@@ -250,4 +250,5 @@ function updateEvader(v) {
 
 $("input[name=optradio]:radio").change(function () {
     leaveTrails = $(this).val();
+    d3.selectAll(".line").remove();
 });
