@@ -191,50 +191,94 @@ function updateContour() {
 var drag = d3.behavior.drag()  
              .on('dragstart', function() { evader.style('fill', 'red'); })
              .on('drag', function() { 
-//                 debugger;
-                 max_x = exScale(0.6);
-                 min_x = exScale(-0.6);
-                 max_y = eyScale(-0.8);
-                 min_y = eyScale(0.9);
-                 if (d3.event.x > max_x) { evaderX = 0.6; temp_x = max_x;} 
-                 else if (d3.event.x < min_x) { evaderX = -0.6; temp_x = min_x;}
-                 else { temp_x = d3.event.x; }
-                    
-                 if (d3.event.y > max_y) { evaderY = -0.8; temp_y = max_y;}
-                 else if (d3.event.y < min_y) { evaderY = 0.8; temp_y = min_y;}
-                 else { temp_y = d3.event.y; }
+                 max_x = exScale(0.6); //right
+                 min_x = exScale(-0.6); //left
+                 max_y = eyScale(-0.8); //bottom
+                 min_y = eyScale(0.8); //top
+                 new_x = exScale.invert(d3.event.x);
+                 new_y = eyScale.invert(d3.event.y);
                  if (evaderX == 0.6) {
                      //we are on the right side
                      console.log("we on the right");
-//                    if (d3.event.dy > 0) {
-//                        evader
-//                    }
+                    if (evaderY == 0.8 || evaderY == -0.8) {
+                        //we are on a right corner
+                        console.log("we on a right corner");
+                        debugger;
+                        if (new_x < evaderX) { //moving left
+                            evaderX = Math.max(new_x, -0.6);
+                        }
+                        else {
+                           if (new_y > evaderY) { //moving up
+                            evaderY = Math.min(new_y, 0.8);
+                            }
+                            else if (new_y < evaderY) { 
+                                console.log("moving down"); //moving down
+                                evaderY = Math.max(new_y, -0.8);
+                            } 
+                        }
+                    }
+                    else {
+                        if (new_y > evaderY) { //moving up
+                            evaderY = Math.min(new_y, 0.8);
+                            }
+                         else if (new_y < evaderY) {// moving down
+                            evaderY = Math.max(new_y, -0.8);
+                         }
+                    }
                  }
                  else if (evaderX == -0.6) {
                      //we are on the left side
                      console.log("we on the left");
-//                    if (d3.event.dy > 0) {
-//                        evader
-//                    }
+                     if (evaderY == 0.8 || evaderY == -0.8) {
+                        //we are on a right corner
+                        console.log("we on a left corner");
+                        if (new_x > evaderX) { //moving right
+                            evaderX = Math.min(new_x, 0.6);
+                        }
+                        else {
+                           if (new_y > evaderY) { //moving up
+                            evaderY = Math.min(new_y, 0.8);
+                            }
+                            else if (new_y < evaderY) { 
+                                console.log("moving down"); //moving down
+                                evaderY = Math.max(new_y, -0.8);
+                            } 
+                        }
+                    }
+                    else {
+                       if (new_y > evaderY) { //moving up
+                        evaderY = Math.min(new_y, 0.8);
+                        }
+                        else if (new_y < evaderY) { 
+                            console.log("moving down"); //moving down
+                            evaderY = Math.max(new_y, -0.8);
+                        } 
+                    }
                  }
                  else if (evaderY == 0.8) {
                      //we are on the top side
                      console.log("we on the top");
-//                    if (d3.event.dy > 0) {
-//                        evader
-//                    }
+                     if (new_x > evaderX) { //moving right
+                        evaderX = Math.min(new_x, 0.6);
+                        }
+                     else if (new_x < evaderX) { //moving left
+                        evaderX = Math.max(new_x, -0.6);
+                     }
                  }
                  else if (evaderY == -0.8) {
                      //we are on the bottom side
                      console.log("we on the bottom");
-//                    if (d3.event.dy > 0) {
-//                        evader
-//                    }
+                     if (new_x > evaderX) { //moving right
+                        evaderX = Math.min(new_x, 0.6);
+                        }
+                     else if (new_x < evaderX) { //moving left
+                        evaderX = Math.max(new_x, -0.6);
+                     }
                  }
-                 
-                 
-                 evader.attr('cx', temp_x)
-                    .attr('cy', temp_y); })
+                 updateContour();
+                 evader.attr('cx', exScale(evaderX))
+                    .attr('cy', eyScale(evaderY));
+                })
              .on('dragend', function() { evader.style('fill', 'black'); });
 
 
