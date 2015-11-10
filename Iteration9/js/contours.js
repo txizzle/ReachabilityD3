@@ -98,22 +98,22 @@ var evader = svg.append("circle")
                 .attr("cy", function(d) {
                     return eyScale(d[1]);
                 })
-                .attr("r", 3)
+                .attr("r", 5)
                 .attr("fill", "blue");
 
 //catch radius
-svg.append("circle")
-.datum([evaderX, evaderY])
-.attr("cx", function(d) { 
-    return exScale(d[0]);
-})
-.attr("cy", function(d) {
-    return eyScale(d[1]);
-})
-.attr("r", height/20)
-.attr("fill", "none")
-.attr("stroke", "black")
-.attr("stroke-dasharray", "10 5");
+var catch_radius = svg.append("circle")
+                .datum([evaderX, evaderY])
+                .attr("cx", function(d) { 
+                    return exScale(d[0]);
+                })
+                .attr("cy", function(d) {
+                    return eyScale(d[1]);
+                })
+                .attr("r", height/20)
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-dasharray", "10 5");
 
 function updateContour() {
     var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader +"Data";
@@ -159,23 +159,24 @@ function updateContour() {
                     .attr("cy", function(d) {
                         return eyScale(d[1]);
                     })
-                    .attr("r", 3)
+                    .attr("r", 5)
                     .attr("fill", "blue")
                     .call(drag);
     
     //catch radius
-    svg.append("circle")
-    .datum([evaderX, evaderY])
-    .attr("cx", function(d) { 
-        return exScale(d[0]);
-    })
-    .attr("cy", function(d) {
-        return eyScale(d[1]);
-    })
-    .attr("r", height/20)
-    .attr("fill", "none")
-    .attr("stroke", "black")
-    .attr("stroke-dasharray", "10 5")
+    catch_radius = svg.append("circle")
+                    .datum([evaderX, evaderY])
+                    .attr("cx", function(d) { 
+                        return exScale(d[0]);
+                    })
+                    .attr("cy", function(d) {
+                        return eyScale(d[1]);
+                    })
+                    .attr("r", height/20)
+                    .attr("fill", "none")
+                    .attr("stroke", "black")
+                    .attr("stroke-dasharray", "10 5")
+                    .call(drag);
     
     //obstacle
     svg.append("path")
@@ -275,11 +276,18 @@ var drag = d3.behavior.drag()
                         evaderX = Math.max(new_x, -0.6);
                      }
                  }
-                 updateContour();
+                 
                  evader.attr('cx', exScale(evaderX))
                     .attr('cy', eyScale(evaderY));
+                 
+                 catch_radius.attr('cx', exScale(evaderX))
+                    .attr('cy', eyScale(evaderY));
                 })
-             .on('dragend', function() { evader.style('fill', 'black'); });
+             .on('dragend', function() { 
+                 evader.style('fill', 'black'); 
+                 currEvader = getValfromXY(evaderX, evaderY);
+                 updateEvader(currEvader);
+             });
 
 
 function updateTime(t) {
@@ -287,6 +295,32 @@ function updateTime(t) {
     $('#timeLabel').val(t);
     document.getElementById('timeSlider').value = t;
     updateContour();
+}
+
+function getValfromXY(x, y) {
+    var s;
+    if (x == 0.6) {
+        // 1.2 < s < 2.8
+        s = y + 2;
+    }
+    else if (x == -0.6) {
+        // 4 < s < 5.6
+        // 4.8 - s = y
+        s = 4.8 - y;
+    }
+    else { //2 possibilites for s that gets that x value: top or bottom
+        s1 = x + 0.6;
+        s2 = 3.4 - x;
+        s1y = getEvaderY(s1*85/5.6 + 1);
+        s2y = getEvaderY(s2*85/5.6 + 1);
+        if (Math.abs(s1y - y) < Math.abs(s2y -y )) { //is it top or bottom? 
+            s = s1;
+        }
+        else {
+            s = s2;
+        }
+    }
+    return Math.round(s*85/5.6+1);
 }
 
 function getEvaderY(val) {
