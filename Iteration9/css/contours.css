@@ -88,3 +88,8 @@ body {
     fill: #de88a3;
     stroke: #f84949;
 }
+
+.evaderpath {
+    fill: none;
+    stroke: black;
+}

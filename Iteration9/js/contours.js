@@ -48,150 +48,18 @@ var line = d3.svg.line()
     .x(function(d) { return xScale(d.y1); })
     .y(function(d) { return yScale(d.x1); });
 
-var obstacleLine = d3.svg.line()
+var objectLine = d3.svg.line()
     .interpolate("linear")
     .x(function(d) { return exScale(d[0]); })
     .y(function(d) { return eyScale(d[1]); });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-svg.append("g")
-.attr("class", "axis")
-.attr("transform", "translate(0, " + height + ")")
-.call(xAxis);
-
-svg.append("g")
-.attr("class", "axis")
-.call(yAxis);
-
-d3.csv("../Iteration6/csv/t1z1Data1.csv", function(mydata)
-{
-    svg.append("path")
-    .datum(mydata)
-    .attr("class", "line")
-    .attr("d", line);
-
-});
-
-d3.csv("../Iteration6/csv/t1z1Data2.csv", function(mydata)
-{
-    svg.append("path")
-    .datum(mydata)
-    .attr("class", "line")
-    .attr("d", line);
-
-});
-
-evaderX = getEvaderX(1);
-evaderY = getEvaderY(1);
-
-//evader
-var evader = svg.append("circle")
-                .datum([evaderX, evaderY])
-                .attr("cx", function(d) { 
-                    return exScale(d[0]);
-                })
-                .attr("cy", function(d) {
-                    return eyScale(d[1]);
-                })
-                .attr("r", 5)
-                .attr("fill", "blue");
-
-//catch radius
-var catch_radius = svg.append("circle")
-                .datum([evaderX, evaderY])
-                .attr("cx", function(d) { 
-                    return exScale(d[0]);
-                })
-                .attr("cy", function(d) {
-                    return eyScale(d[1]);
-                })
-                .attr("r", height/20)
-                .attr("fill", "none")
-                .attr("stroke", "black")
-                .attr("stroke-dasharray", "10 5");
-
-function updateContour() {
-    var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader +"Data";
-    var key = "t" + currTime + "z" + currEvader;
-//    console.log(d3.selectAll("path"));
-    d3.selectAll("path").attr("class", "line");
-    if (leaveTrails == 0) {
-        d3.selectAll("path").remove();
-    }
-    if (showEvader == 1) {
-        d3.selectAll("circle").remove();
-    }
-    if (islands.indexOf(key) > -1) {
-//        console.log(">1 islands");
-        d3.csv(currFile+"1.csv", function(mydata) {
-                svg.append("path")
-                .datum(mydata)
-                .attr("class", "mainline")
-                .attr("d", line);
-            });
-        d3.csv(currFile+"2.csv", function(mydata) {
-            svg.append("path")
-            .datum(mydata)
-            .attr("class", "mainline")
-            .attr("d", line);
-        });
-    } else {
-//        console.log("only one island");
-        d3.csv(currFile+".csv", function(mydata){
-            svg.append("path")
-            .datum(mydata)
-            .attr("class", "mainline")
-            .attr("d", line);
-        });
-    }
-    
-    //evader
-    evader = svg.append("circle")
-                    .datum([evaderX, evaderY])
-                    .attr("cx", function(d) { 
-                        return exScale(d[0]);
-                    })
-                    .attr("cy", function(d) {
-                        return eyScale(d[1]);
-                    })
-                    .attr("r", 5)
-                    .attr("fill", "blue")
-                    .call(drag);
-    
-    //catch radius
-    catch_radius = svg.append("circle")
-                    .datum([evaderX, evaderY])
-                    .attr("cx", function(d) { 
-                        return exScale(d[0]);
-                    })
-                    .attr("cy", function(d) {
-                        return eyScale(d[1]);
-                    })
-                    .attr("r", height/20)
-                    .attr("fill", "none")
-                    .attr("stroke", "black")
-                    .attr("stroke-dasharray", "10 5")
-                    .call(drag);
-    
-    //obstacle
-    svg.append("path")
-    .datum(getObstacle(parseInt(currTime)))
-    .attr("class", "obstacle")
-    .attr("d", obstacleLine);
-
-    if (leaveTrails == 1) {
-        d3.select(".line").remove();
-    }
-};
-
 var drag = d3.behavior.drag()  
              .on('dragstart', function() { evader.style('fill', 'red'); })
-             .on('drag', function() { 
+             .on('drag', function() {
+//                 setInterval(function(){ 
+//                     currEvader = getValfromXY(evaderX, evaderY);
+//                 updateEvader(currEvader);
+//                     updateContour(); }, 10);
                  max_x = exScale(0.6); //right
                  min_x = exScale(-0.6); //left
                  max_y = eyScale(-0.8); //bottom
@@ -282,12 +150,171 @@ var drag = d3.behavior.drag()
                  
                  catch_radius.attr('cx', exScale(evaderX))
                     .attr('cy', eyScale(evaderY));
+                 currEvader = getValfromXY(evaderX, evaderY);
+                 //if we want to update contour here:
+//                 updateEvader(currEvader);
                 })
              .on('dragend', function() { 
-                 evader.style('fill', 'black'); 
-                 currEvader = getValfromXY(evaderX, evaderY);
+                 evader.style('fill', 'black');
                  updateEvader(currEvader);
              });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+.attr("class", "axis")
+.attr("transform", "translate(0, " + height + ")")
+.call(xAxis);
+
+svg.append("g")
+.attr("class", "axis")
+.call(yAxis);
+
+d3.csv("../Iteration6/csv/t1z1Data1.csv", function(mydata)
+{
+    svg.append("path")
+    .datum(mydata)
+    .attr("class", "line")
+    .attr("d", line);
+
+});
+
+d3.csv("../Iteration6/csv/t1z1Data2.csv", function(mydata)
+{
+    svg.append("path")
+    .datum(mydata)
+    .attr("class", "line")
+    .attr("d", line);
+
+});
+
+evaderX = getEvaderX(1);
+evaderY = getEvaderY(1);
+
+//evader path
+svg.append("path")
+    .datum([[-0.6,-0.8],[-0.6,0.8],[0.6,0.8],[0.6,-0.8],[-0.6,-0.8]])
+    .attr("class", "evaderpath")
+    .attr("d", objectLine)
+    .attr("stroke-dasharray", "10 5");
+
+//evader
+var evader = svg.append("circle")
+                .datum([evaderX, evaderY])
+                .attr("cx", function(d) { 
+                    return exScale(d[0]);
+                })
+                .attr("cy", function(d) {
+                    return eyScale(d[1]);
+                })
+                .attr("r", 5)
+                .attr("fill", "blue")
+                .call(drag);
+
+//catch radius
+var catch_radius = svg.append("circle")
+                .datum([evaderX, evaderY])
+                .attr("cx", function(d) { 
+                    return exScale(d[0]);
+                })
+                .attr("cy", function(d) {
+                    return eyScale(d[1]);
+                })
+                .attr("r", height/20)
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-width", "3px")
+                .attr("stroke-dasharray", "10 5");
+
+function updateContour() {
+    var currFile = "../Iteration6/csv/t" + currTime + "z" + currEvader +"Data";
+    var key = "t" + currTime + "z" + currEvader;
+//    console.log(d3.selectAll("path"));
+    d3.selectAll("path").attr("class", "line");
+    if (leaveTrails == 0) {
+        d3.selectAll("path").remove();
+    }
+    if (showEvader == 1) {
+        d3.selectAll("circle").remove();
+    }
+    if (islands.indexOf(key) > -1) {
+//        console.log(">1 islands");
+        d3.csv(currFile+"1.csv", function(mydata) {
+                svg.append("path")
+                .datum(mydata)
+                .attr("class", "mainline")
+                .attr("d", line);
+            });
+        d3.csv(currFile+"2.csv", function(mydata) {
+            svg.append("path")
+            .datum(mydata)
+            .attr("class", "mainline")
+            .attr("d", line);
+        });
+    } else {
+//        console.log("only one island");
+        d3.csv(currFile+".csv", function(mydata){
+            svg.append("path")
+            .datum(mydata)
+            .attr("class", "mainline")
+            .attr("d", line);
+        });
+    }
+    
+    //evader path
+    svg.append("path")
+        .datum([[-0.6,-0.8],[-0.6,0.8],[0.6,0.8],[0.6,-0.8],[-0.6,-0.8]])
+        .attr("class", "evaderpath")
+        .attr("d", objectLine)
+        .attr("stroke-dasharray", "10 5");
+    
+    //evader
+    evader = svg.append("circle")
+                    .datum([evaderX, evaderY])
+                    .attr("cx", function(d) { 
+                        return exScale(d[0]);
+                    })
+                    .attr("cy", function(d) {
+                        return eyScale(d[1]);
+                    })
+                    .attr("r", 5)
+                    .attr("fill", "blue")
+                    .call(drag);
+    
+    //catch radius
+    catch_radius = svg.append("circle")
+                    .datum([evaderX, evaderY])
+                    .attr("cx", function(d) { 
+                        return exScale(d[0]);
+                    })
+                    .attr("cy", function(d) {
+                        return eyScale(d[1]);
+                    })
+                    .attr("r", height/20)
+                    .attr("fill", "none")
+                    .attr("stroke", "black")
+                    .attr("stroke-width", "3px")
+                    .attr("stroke-dasharray", "10 5")
+                    .call(drag);
+    
+    
+    
+    //obstacle
+    svg.append("path")
+    .datum(getObstacle(parseInt(currTime)))
+    .attr("class", "obstacle")
+    .attr("d", objectLine);
+
+    if (leaveTrails == 1) {
+        d3.select(".line").remove();
+    }
+};
+
+
 
 
 function updateTime(t) {
@@ -308,16 +335,15 @@ function getValfromXY(x, y) {
         // 4.8 - s = y
         s = 4.8 - y;
     }
-    else { //2 possibilites for s that gets that x value: top or bottom
-        s1 = x + 0.6;
-        s2 = 3.4 - x;
-        s1y = getEvaderY(s1*85/5.6 + 1);
-        s2y = getEvaderY(s2*85/5.6 + 1);
-        if (Math.abs(s1y - y) < Math.abs(s2y -y )) { //is it top or bottom? 
-            s = s1;
+    else {
+        if (y == 0.8) { //top
+            // 1.2 < s < 2.8
+            s = 3.4 - x;
         }
-        else {
-            s = s2;
+        else if (y == -0.8) { //bottom
+            // 4 < s < 5.6
+            // 4.8 - s = y
+            s = x + 0.6;
         }
     }
     return Math.round(s*85/5.6+1);
@@ -378,3 +404,5 @@ $("input[name=optradio]:radio").change(function () {
     leaveTrails = $(this).val();
     d3.selectAll(".line").remove();
 });
+
+element.addEventListener("mousedown", function(e) { e.preventDefault(); }, false);
