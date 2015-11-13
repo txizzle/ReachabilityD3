@@ -5,6 +5,7 @@ var islands;
 var leaveTrails = 0;
 var evaderX;
 var evaderY;
+var special;
 
 //Map from contours to number of 'islands' in plot
 $.get("twoislands.txt", function(data) {
@@ -13,13 +14,13 @@ $.get("twoislands.txt", function(data) {
 
 //Initial D3 Necessities
 var margin = {
-    top: 80,
-    right: 80,
-    bottom: 80,
-    left: 80
+    top: 20,
+    right: 20,
+    bottom: 20,
+    left: 20
   },
-  width = 500 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+  width = 600 - margin.left - margin.right,
+  height = 600 - margin.top - margin.bottom;
 var xScale = d3.scale.linear().domain([1, 31]).range([0, width]);
 var yScale = d3.scale.linear().domain([1, 31]).range([height, 0]);
 var exScale = d3.scale.linear().domain([-1, 1]).range([0, width]);
@@ -48,13 +49,14 @@ var drag = d3.behavior.drag().on('dragstart', function() {
   min_y = eyScale(0.8); //top
   new_x = exScale.invert(d3.event.x);
   new_y = eyScale.invert(d3.event.y);
+  special = false;
   if (evaderX == 0.6) {
     //we are on the right side
-    console.log("we on the right");
+    console.log("we are on the right");
     if (evaderY == 0.8 || evaderY == -0.8) {
       //we are on a right corner
-      console.log("we on a right corner");
-      debugger;
+      console.log("we are on a right corner");
+//      debugger;
       if (new_x < evaderX) { //moving left
         evaderX = Math.max(new_x, -0.6);
       } else {
@@ -68,18 +70,32 @@ var drag = d3.behavior.drag().on('dragstart', function() {
     } else {
       if (new_y > evaderY) { //moving up
         evaderY = Math.min(new_y, 0.8);
+        if (evaderY == 0.8) {
+          special = true;
+          currEvader = 44;
+        }
       } else if (new_y < evaderY) { // moving down
         evaderY = Math.max(new_y, -0.8);
+        if (evaderY == -0.8) {
+          special = true;
+          currEvader = 19;
+        }
       }
     }
   } else if (evaderX == -0.6) {
     //we are on the left side
-    console.log("we on the left");
+    console.log("we are on the left");
     if (evaderY == 0.8 || evaderY == -0.8) {
-      //we are on a right corner
-      console.log("we on a left corner");
+      //we are on a corner
+      console.log("we are on a left corner");
       if (new_x > evaderX) { //moving right
         evaderX = Math.min(new_x, 0.6);
+        special = true;
+        if (evaderY == 0.8) {
+          currEvader = 61;
+        } else {
+          currEvader = 2;
+        }
       } else {
         if (new_y > evaderY) { //moving up
           evaderY = Math.min(new_y, 0.8);
@@ -89,42 +105,61 @@ var drag = d3.behavior.drag().on('dragstart', function() {
         }
       }
     } else {
+//      debugger;
       if (new_y > evaderY) { //moving up
         evaderY = Math.min(new_y, 0.8);
-      } else if (new_y < evaderY) {
-        console.log("moving down"); //moving down
+        if (evaderY == 0.8) {
+          special = true;
+          currEvader = 61;
+        }
+      } else if (new_y < evaderY) { //moving down
         evaderY = Math.max(new_y, -0.8);
+        if (evaderY == -0.8) {
+          special = true;
+          currEvader = 2;
+        }
       }
     }
   } else if (evaderY == 0.8) {
     //we are on the top side
-    console.log("we on the top");
+    console.log("we are on the top");
     if (new_x > evaderX) { //moving right
       evaderX = Math.min(new_x, 0.6);
+      if (evaderX == 0.6) {
+        special = true;
+        currEvader = 43;
+      }
     } else if (new_x < evaderX) { //moving left
       evaderX = Math.max(new_x, -0.6);
     }
   } else if (evaderY == -0.8) {
     //we are on the bottom side
-    console.log("we on the bottom");
+    console.log("we are on the bottom");
     if (new_x > evaderX) { //moving right
       evaderX = Math.min(new_x, 0.6);
+      if (evaderX == 0.6) {
+        special = true;
+        currEvader = 20;
+      }
     } else if (new_x < evaderX) { //moving left
       evaderX = Math.max(new_x, -0.6);
     }
   }
   evader.attr('cx', exScale(evaderX)).attr('cy', eyScale(evaderY));
   catch_radius.attr('cx', exScale(evaderX)).attr('cy', eyScale(evaderY));
-  currEvader = getValfromXY(evaderX, evaderY);
   //if we want to update contour here:
-  //                 updateEvader(currEvader);
-}).on('dragend', function() {
-  evader.style('fill', 'black');
+  debugger;
+  if (special == false) {
+    currEvader = getValfromXY(evaderX, evaderY);
+  }
   updateEvader(currEvader);
+}).on('dragend', function() {
+  evader.style('fill', 'blue');
+//  updateEvader(currEvader);
 });
 
 //Initialize SVG
-var svg = d3.select("body").append("svg").attr("width", width + margin.left +
+var svg = d3.select("#contour").append("svg").attr("width", width + margin.left +
   margin.right).attr("height", height + margin.top + margin.bottom).append(
   "g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 svg.append("g").attr("class", "axis").attr("transform", "translate(0, " +
