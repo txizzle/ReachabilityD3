@@ -14,13 +14,13 @@ $.get("twoislands.txt", function(data) {
 
 //Initial D3 Necessities
 var margin = {
-    top: 20,
-    right: 20,
-    bottom: 20,
-    left: 20
+    top: 40,
+    right: 40,
+    bottom: 40,
+    left: 40
   },
-  width = 600 - margin.left - margin.right,
-  height = 600 - margin.top - margin.bottom;
+  width = 550 - margin.left - margin.right,
+  height = 550 - margin.top - margin.bottom;
 var xScale = d3.scale.linear().domain([1, 31]).range([0, width]);
 var yScale = d3.scale.linear().domain([1, 31]).range([height, 0]);
 var exScale = d3.scale.linear().domain([-1, 1]).range([0, width]);
