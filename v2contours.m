@@ -1,5 +1,5 @@
 function v2contours(data)
-    mkdir('data_contours_pt2');
+    mkdir('data_contours');
     dimensions = size(size(data));
     is4d = (dimensions(2) == 5);
     
@@ -12,7 +12,7 @@ function v2contours(data)
         len_5 = length(data(1,1,1,1,:));
     end
     
-    for var1=23:len_3
+    for var1=1:len_3
         disp(strcat('Currently processing e=', int2str(var1))) 
         for var2=1:len_4
             if (is4d)
