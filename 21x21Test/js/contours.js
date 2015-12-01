@@ -6,7 +6,7 @@ var leaveTrails = 0;
 var special;
 
 //Map from contours to number of 'islands' in plot
-$.get("../data_contours/twoislands.txt", function(data) {
+$.get("data_contours/twoislands.txt", function(data) {
   islands = data.split("\n");
 });
 
@@ -19,8 +19,8 @@ var margin = {
   },
   width = 550 - margin.left - margin.right,
   height = 550 - margin.top - margin.bottom;
-var xScale = d3.scale.linear().domain([1, 31]).range([0, width]);
-var yScale = d3.scale.linear().domain([1, 31]).range([height, 0]);
+var xScale = d3.scale.linear().domain([1, 21]).range([0, width]);
+var yScale = d3.scale.linear().domain([1, 21]).range([height, 0]);
 var exScale = d3.scale.linear().domain([-1, 1]).range([0, width]);
 var eyScale = d3.scale.linear().domain([-1, 1]).range([height, 0]);
 var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -46,12 +46,12 @@ svg.append("g").attr("class", "axis").attr("transform", "translate(0, " +
 svg.append("g").attr("class", "axis").call(yAxis);
 
 //Initial Contour for t=1, z=1
-d3.csv("../data_contours/t1z1Data.csv", function(mydata) {
+d3.csv("data_contours/t1z1Data.csv", function(mydata) {
   svg.append("path").datum(mydata).attr("class", "line").attr("d", line);
 });
 
 function updateContour() {
-  var currFile = "../data_contours/t" + currTime + "z" + currEvader + "Data";
+  var currFile = "data_contours/t" + currTime + "z" + currEvader + "Data";
   var key = "t" + currTime + "z" + currEvader;
   d3.selectAll("path").attr("class", "line");
   if (leaveTrails == 0) {
