@@ -58,7 +58,7 @@ function updateContour() {
   if (leaveTrails == 0) {
     d3.selectAll("path").remove();
   }
-  if (islands.indexOf(key) > -1) {
+//  if (islands.indexOf(key) > -1) {
     d3.csv(currFile + "1.csv", function(mydata) {
       svg.append("path").datum(mydata).attr("class", "mainline").attr("d",
         line);
@@ -67,12 +67,13 @@ function updateContour() {
       svg.append("path").datum(mydata).attr("class", "mainline").attr("d",
         line);
     });
-  } else {
+////  } else {
+//    console.log("One island!");
     d3.csv(currFile + ".csv", function(mydata) {
       svg.append("path").datum(mydata).attr("class", "mainline").attr("d",
         line);
     });
-  }
+//  }
 };
 
 function updateTime(t) {

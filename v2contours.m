@@ -2,6 +2,7 @@ function v2contours(data)
     mkdir('data_contours');
     dimensions = size(size(data));
     is4d = (dimensions(2) == 5);
+    header = {'x1', 'y1'};
     
     fileID = fopen('data_contours/twoislands.txt','a');
     len_x = length(data(:,1,1,1,1));
@@ -28,14 +29,14 @@ function v2contours(data)
                         Csplit{j} = C(:,breakpts(j)+1:breakpts(j+1)-1);
                     end
                     fn = strcat('t',int2str(var3), 'd', int2str(var2), 'z', int2str(var1));
-                    headers = {'x1', 'y1'};
-                    if length(breakpts) <= 2
+
+                    if length(breakpts) == 2
                         csvname = strcat('data_contours/', fn, 'Data.csv');
-                        csvwrite_with_headers(csvname',Csplit{1},headers);
-                    else
+                        csvwrite_with_headers(csvname,Csplit{1}.',header);
+                    elseif length(breakpts) > 2
                         for j=1:length(Csplit)
                             csvname = strcat('data_contours/', fn, 'Data', int2str(j), '.csv');
-                            csvwrite_with_headers(csvname',Csplit{j},headers);
+                            csvwrite_with_headers(csvname,Csplit{j}.',header);
                         end
                     end
                     
@@ -55,13 +56,13 @@ function v2contours(data)
                     Csplit{j} = C(:,breakpts(j)+1:breakpts(j+1)-1);
                 end
                 fn = strcat('t',int2str(var2), 'z', int2str(var1));
-                if length(breakpts) <= 2
+                if length(breakpts) == 2
                     csvname = strcat('data_contours/', fn, 'Data.csv');
-                    csvwrite_with_headers(csvname,Csplit{1},headers);
-                else
+                    csvwrite_with_headers(csvname,Csplit{1}.',headers);
+                elseif length(breakpts) > 2
                     for j=1:length(Csplit)
                         csvname = strcat('data_contours/', fn, 'Data', int2str(j), '.csv');
-                        csvwrite_with_headers(csvname',Csplit{j},headers);
+                        csvwrite_with_headers(csvname,Csplit{j}.',headers);
                     end
                 end
                 if (length(breakpts) > 2)
