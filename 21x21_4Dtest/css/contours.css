@@ -1,0 +1,95 @@
+/*!
+ * Start Bootstrap - Stylish project Bootstrap Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Global Styles */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    color: black;
+}
+
+body {
+    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+    background-color: #c3c3c3;
+}
+
+.text-vertical-center {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.text-vertical-center h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 4.5em;
+    font-weight: 700;
+}
+
+.btn {
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    transition: all .3s;
+    border-radius: 0px;
+    color: #800080 ;
+    font-size: 20px;
+    background: black;
+    padding: 10px 20px 10px 20px;
+    border: solid #800080  2px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: #800080 ;
+    color: white;
+    text-decoration: none;
+}
+
+.row {
+    text-align: center;
+}
+
+#roundslider {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+}
+
+.line {
+    fill: none;
+    stroke: #ff496c;
+    stroke-width: 0.5 px;
+}
+
+.mainline {
+    fill: none;
+    stroke: #130af7;
+    stroke-width: 0.5 px;
+}
+
+.obstacle {
+    fill: #de88a3;
+    stroke: #f84949;
+}
+
+.evaderpath {
+    fill: none;
+    stroke: black;
+}
