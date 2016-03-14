@@ -1,10 +1,10 @@
 function v2contours(data)
-    mkdir('data_contours21');
+    mkdir('data_contours31');
     dimensions = size(size(data));
     is4d = (dimensions(2) == 5);
     header = {'x1', 'y1'};
     
-    fileID = fopen('data_contours21/twoislands.txt','a');
+    fileID = fopen('data_contours31/twoislands.txt','a');
     len_x = length(data(:,1,1,1,1));
     len_y = length(data(1,:,1,1,1));
     len_3 = length(data(1,1,:,1,1));
@@ -14,7 +14,7 @@ function v2contours(data)
     end
     
     for var1=1:len_3
-        disp(strcat('Currently processing e=', int2str(var1))) 
+        disp(strcat('Currently processing e=', int2str(var1), '/', int2str(len_3))) 
         for var2=1:len_4
             if (is4d)
                 for var3=1:len_5
@@ -31,11 +31,11 @@ function v2contours(data)
                     fn = strcat('t',int2str(var3), 'd', int2str(var2), 'z', int2str(var1));
 
                     if length(breakpts) == 2
-                        csvname = strcat('data_contours21/', fn, 'Data.csv');
+                        csvname = strcat('data_contours31/', fn, 'Data.csv');
                         csvwrite_with_headers(csvname,Csplit{1}.',header);
                     elseif length(breakpts) > 2
                         for j=1:length(Csplit)
-                            csvname = strcat('data_contours21/', fn, 'Data', int2str(j), '.csv');
+                            csvname = strcat('data_contours31/', fn, 'Data', int2str(j), '.csv');
                             csvwrite_with_headers(csvname,Csplit{j}.',header);
                         end
                     end
@@ -57,11 +57,11 @@ function v2contours(data)
                 end
                 fn = strcat('t',int2str(var2), 'z', int2str(var1));
                 if length(breakpts) == 2
-                    csvname = strcat('data_contours21/', fn, 'Data.csv');
+                    csvname = strcat('data_contours31/', fn, 'Data.csv');
                     csvwrite_with_headers(csvname,Csplit{1}.',headers);
                 elseif length(breakpts) > 2
                     for j=1:length(Csplit)
-                        csvname = strcat('data_contours21/', fn, 'Data', int2str(j), '.csv');
+                        csvname = strcat('data_contours31/', fn, 'Data', int2str(j), '.csv');
                         csvwrite_with_headers(csvname,Csplit{j}.',headers);
                     end
                 end
